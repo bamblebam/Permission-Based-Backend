@@ -1,4 +1,5 @@
 import app from "./src/app";
+import sequelize from "./src/db";
 
 const port = process.env.PORT || 3000;
 
@@ -6,14 +7,14 @@ const port = process.env.PORT || 3000;
 (async () => {
   try {
     // Connecting to Database
-    const isConnected = true;
+    await sequelize.authenticate();
+    await sequelize.sync({ force: false });
+    console.log("Connection has been established successfully.");
 
     // If Connection Successful
-    if (isConnected)
-      app.listen(port, () =>
-        console.log(`Server listening for requests on port ${port}`)
-      );
-    else process.exit();
+    app.listen(port, () =>
+      console.log(`Server listening for requests on port ${port}`)
+    );
   } catch (e) {
     console.log(e);
   }
