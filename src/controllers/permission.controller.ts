@@ -110,6 +110,39 @@ async function getPermissionById(
   }
 }
 
+//Update Permission by id
+async function updatePermissionById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const id = req.params.id;
+  const value = req.body.value;
+  if (!value || value.length === 0) {
+    return res.status(400).json({
+      message: "Content can not be empty!",
+    });
+  }
+  try {
+    const data = await Permission.findByPk(id);
+    if (!data) {
+      return res.status(404).json({
+        message: `Cannot find Permission with id=${id}.`,
+      });
+    }
+    data.update({ value: value });
+    await data.save();
+    const response = data.toJSON() as Object;
+    return res
+      .status(200)
+      .json({ message: "Permission updated successfully", data: response });
+  } catch (e: any) {
+    res.status(500).send({
+      message: "Error retrieving Permission with id=" + id,
+    });
+  }
+}
+
 //Delete Permission by id
 async function deletePermissionById(
   req: Request,
@@ -141,4 +174,5 @@ export {
   getAllPermissions,
   getPermissionById,
   deletePermissionById,
+  updatePermissionById,
 };
