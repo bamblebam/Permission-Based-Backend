@@ -12,6 +12,9 @@ import {
   deleteEmployeeById,
 } from "../controllers/employee.controller";
 
+//Import Middleware
+import checkPermission from "../middleware/permissionCheck";
+
 //Create Router
 const router: Router = express.Router();
 
@@ -25,6 +28,10 @@ router.get("/all", getAllEmployees);
 router.get("/:id", getEmployeeById);
 
 //Delete Employee By Id
-router.delete("/delete/:id", deleteEmployeeById);
+router.delete(
+  "/delete/:id",
+  checkPermission("employee", "company"),
+  deleteEmployeeById
+);
 
 export default router;
