@@ -68,4 +68,31 @@ async function getUserById(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { createUser, getAllUsers, getUserById };
+//Get all permissions for a user
+async function getPermissionsByUserId(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const id = req.params.id;
+  try {
+    const data = await User.findByPk(id, {
+      include: ["permissions"],
+    });
+    if (!data) {
+      return res.status(404).json({
+        message: `Cannot find User with id=${id}.`,
+      });
+    }
+    const response = data.toJSON() as Object;
+    return res
+      .status(200)
+      .json({ message: "User retrieved successfully", data: response });
+  } catch (e: any) {
+    res.status(500).send({
+      message: e.message || "Some error occurred while retrieving user.",
+    });
+  }
+}
+
+export { createUser, getAllUsers, getUserById, getPermissionsByUserId };

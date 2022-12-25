@@ -9,6 +9,7 @@ import {
   createPermission,
   getAllPermissions,
   getPermissionById,
+  deletePermissionById,
 } from "../controllers/permission.controller";
 
 //Create Router
@@ -22,5 +23,8 @@ router.get("/all", getAllPermissions);
 
 //Get Permission By Id
 router.get("/:id", getPermissionById);
+
+//Delete Permission By Id
+router.delete("/delete/:id", deletePermissionById);
 
 export default router;

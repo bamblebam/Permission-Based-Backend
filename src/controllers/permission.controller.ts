@@ -18,10 +18,36 @@ async function createPermission(
     return;
   }
 
-  // Create a Permission
+  //Check if permission exists beforehand
+  try {
+    const perm = await Permission.findOne({
+      where: { userId: req.body.userId, key: req.body.key },
+    });
+    // console.log(perm);
+    if (perm) {
+      const value = perm.dataValues.value;
+      if (!value.includes(req.body.value)) {
+        perm.update({ value: [...value, req.body.value] });
+        await perm.save();
+        return res
+          .status(200)
+          .json({ message: "Permission updated successfully", data: perm });
+      }
+      return res
+        .status(200)
+        .json({ message: "Permission already exists", data: perm });
+    }
+  } catch (e: any) {
+    res.status(500).send({
+      message:
+        e.message || "Some error occurred while creating the Permission.",
+    });
+  }
+
+  // Create a new Permission
   const permission = {
     key: req.body.key,
-    value: req.body.value,
+    value: [req.body.value],
     userId: req.body.userId,
   };
 
@@ -84,4 +110,35 @@ async function getPermissionById(
   }
 }
 
-export { createPermission, getAllPermissions, getPermissionById };
+//Delete Permission by id
+async function deletePermissionById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const id = req.params.id;
+  try {
+    const data = await Permission.destroy({
+      where: { id: id },
+    });
+    if (!data) {
+      return res.status(404).json({
+        message: `Cannot delete Permission with id=${id}.`,
+      });
+    }
+    return res
+      .status(200)
+      .json({ message: "Permission deleted successfully", data: data });
+  } catch (e: any) {
+    res.status(500).send({
+      message: "Error deleting Permission with id=" + id,
+    });
+  }
+}
+
+export {
+  createPermission,
+  getAllPermissions,
+  getPermissionById,
+  deletePermissionById,
+};

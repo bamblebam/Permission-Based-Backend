@@ -9,6 +9,7 @@ import {
   createUser,
   getAllUsers,
   getUserById,
+  getPermissionsByUserId,
 } from "../controllers/user.controller";
 
 //Create Router
@@ -22,5 +23,8 @@ router.get("/all", getAllUsers);
 
 //Get User By Id
 router.get("/:id", getUserById);
+
+//Get Permissions By User Id
+router.get("/permissions/:id", getPermissionsByUserId);
 
 export default router;
