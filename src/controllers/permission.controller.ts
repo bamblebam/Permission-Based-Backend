@@ -2,7 +2,6 @@
 import { NextFunction, Request, Response } from "express";
 
 import Permission from "../models/Permission.model";
-import User from "../models/User.model";
 
 // Create and Save a new Permission
 async function createPermission(

@@ -1,6 +1,8 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 import sequelize from "../db";
+
 import Permission from "./Permission.model";
+import Employee from "./Employee.model";
 
 const User = sequelize.define("User", {
   id: {
@@ -20,6 +22,7 @@ const User = sequelize.define("User", {
   },
 });
 
+//User-Permission Relationship
 User.hasMany(Permission, {
   as: "permissions",
   foreignKey: "userId",
@@ -28,5 +31,15 @@ User.hasMany(Permission, {
 });
 
 Permission.belongsTo(User, { as: "user", foreignKey: "userId" });
+
+//User-Employee Relationship
+User.hasOne(Employee, {
+  as: "employee",
+  foreignKey: "userId",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+Employee.belongsTo(User, { as: "user", foreignKey: "userId" });
 
 export default User;
