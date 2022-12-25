@@ -25,7 +25,7 @@ router.post("/create", createEmployee);
 router.get("/all", getAllEmployees);
 
 //Get Employee By Id
-router.get("/:id", getEmployeeById);
+router.get("/:id", checkPermission("employee", "company"), getEmployeeById);
 
 //Delete Employee By Id
 router.delete(

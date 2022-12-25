@@ -125,8 +125,16 @@ async function updatePermissionById(
   try {
     const data = await Permission.findByPk(id);
     if (!data) {
-      return res.status(404).json({
-        message: `Cannot find Permission with id=${id}.`,
+      const permission = {
+        key: req.body.key,
+        value: [req.body.value],
+        userId: req.body.userId,
+      };
+      const data = await Permission.create(permission);
+      const response = data.toJSON() as Object;
+      return res.status(200).json({
+        message: "Permission created successfully",
+        data: response,
       });
     }
     data.update({ value: value });
