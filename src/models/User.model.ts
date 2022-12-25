@@ -1,5 +1,6 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 import sequelize from "../db";
+import Permission from "./Permission.model";
 
 const User = sequelize.define("User", {
   id: {
@@ -18,5 +19,14 @@ const User = sequelize.define("User", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+User.hasMany(Permission, {
+  as: "permissions",
+  foreignKey: "userId",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+Permission.belongsTo(User, { as: "user", foreignKey: "userId" });
 
 export default User;

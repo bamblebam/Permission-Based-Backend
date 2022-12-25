@@ -1,6 +1,8 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 import sequelize from "../db";
 
+import User from "./User.model";
+
 const Permission = sequelize.define("Permission", {
   id: {
     type: DataTypes.INTEGER,
