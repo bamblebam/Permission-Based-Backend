@@ -2,16 +2,28 @@ version: "3.9"
 
 services:
   server:
+    container_name: server
+    image: bamblebam/express-postgres
     build: .
     ports:
       - "3000:3000"
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+      POSTGRES_HOST: "db"
+    depends_on:
+      - db
   db:
+    container_name: db
     image: "postgres"
     ports:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: "admin"
       POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+      POSTGRES_HOST: "db"
     volumes:
       - data:/var/lib/postgresql/data
 
