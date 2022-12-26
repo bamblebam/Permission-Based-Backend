@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import Permission from "../models/Permission.model";
 import Employee from "../models/Employee.model";
 
-function checkPermission(table: string, column: String) {
+function checkPermission(table: string, column: string) {
   return async function (req: Request, res: Response, next: NextFunction) {
     //User Id
     const userId = req.headers.authorization?.replace(/^Bearer\s/, "");
@@ -19,7 +19,7 @@ function checkPermission(table: string, column: String) {
       const permission = await Permission.findOne({
         where: { userId: userId, key: permissionKey },
       });
-      //   console.log(permission?.dataValues);
+      // console.log(permission?.dataValues);
       if (!permission) {
         return res.status(403).json({ message: "Permission denied" });
       }
@@ -31,7 +31,7 @@ function checkPermission(table: string, column: String) {
           .status(404)
           .json({ message: "Employee not found from middleware" });
       }
-      if (!permission.dataValues.value.includes(employee.dataValues.company)) {
+      if (!permission.dataValues.value.includes(employee.dataValues[column])) {
         // console.log(employee.dataValues.column);
         return res.status(403).json({ message: "Permission denied" });
       }
